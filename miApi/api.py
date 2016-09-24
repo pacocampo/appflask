@@ -10,9 +10,10 @@ class Direccion(object):
 	def __init__(self):
 		return
 
-	def obtenDireccion(self, latitud, longitud):
+	def obtenDireccion(self, *args):
+		print(args)
 		try:
-			parameters = {"latlng":latitud + ", " + longitud, "key":self.apikey}
+			parameters = {"latlng":args[0] + ", " + args[1], "key":self.apikey}
 			resultado = requests.get(self.endpoint, params=parameters).json()
 			# print(resultado)
 			listado = resultado["results"][0]

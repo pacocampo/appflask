@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Direccion</title>
-</head>
-<body>
+{% extends "main.html" %}
+{% block info %}
+	<h1>Desde main</h1>	
+	</br>
+	</br>
+	<!--comentario-->
+	<form method="POST" action="/api">
+		{{form.csrf_token}}
+		<p>Latitud {{form.latitud}} </p>
+		<p>Longitud {{form.longitud}} </p>
+		<input type="submit" value="Save">
+	</form>
 	Mi dirección es : {{data.direccion}}
 	</br>
 	mi ciudad es : {{data.ciudad}}
+	
 
-</body>
-</html>
+{% endblock info %}
+	

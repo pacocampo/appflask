@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<!--comentario -->
-</head>
-<body>
+{% extends "main.html" %}
+{% block info %}
 	<h1>Hola desde templates</h1>
 	{% for elemento in data  %}
 		<p>{{elemento}}</p>
@@ -15,5 +9,6 @@
 	{% else %}
 		<p>hola nuevo humano</p>
 	{% endif %}-->
-</body>
-</html>
+
+{% endblock info %}
+	
