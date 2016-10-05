@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Login</title>
+</head>
+<body>
+	Registrate
+	<form method="POST">
+		{{form.csrf_token}}
+		{{form.usuario}}
+		{{form.password}}
+		<input type="submit" value="Save">
+	</form>
+	<a href=""></a>
+	{% for d in data  %}
+		<p>{{d}}</p>
+	{% endfor %}
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+{% block info %}
+	<form method="POST">
+		{{form.csrf_token}}
+		{{form.nombre}}
+		{{form.precio}}
+		<input type="submit" value="Guardar">
+	</form>
+	<a href="">Cat 1</a>
+	<a href="">Cat 2</a>
+	<a href="">Cat 3</a>
+{% endblock info %}
