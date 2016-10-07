@@ -35,5 +35,34 @@ def producto():
 		fbase.post('/producto/categoria', {"categoria":formulario.nombre.data, "tag":formulario.precio.data})
 	result = fbase.get('/producto/categoria', None)
 	print(result)
+
 	return render_template("producto.html", data = result, form=formulario)
+
+@app.route("/producto/<id>")
+def detailProduct(id=None):
+	print id
+	fbase = firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
+
+	products = fbase.get('/producto/categoria', None)
+
+	product = products[id]
+	return render_template("detail.html", producto=product)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

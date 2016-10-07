@@ -6,7 +6,7 @@
 		{{form.precio}}
 		<input type="submit" value="Guardar">
 	</form>
-	<a href="">Cat 1</a>
-	<a href="">Cat 2</a>
-	<a href="">Cat 3</a>
+	{% for product in data %}
+		<a href="/producto/{{product}}">cat </a>
+	{% endfor %}
 {% endblock info %}
