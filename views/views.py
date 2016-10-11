@@ -38,8 +38,21 @@ def producto():
 	if formulario.validate_on_submit():
 		fbase.post('/producto/categoria', {"categoria":formulario.nombre.data, "tag":formulario.precio.data})
 	#esto hace un get a nuestra base de datos
-	result = fbase.get('/producto/categoria/', None)
+	result = fbase.get('/producto/categoria', None)
+	print(result)
+
 	return render_template("producto.html", data = result, form=formulario)
+
+@app.route("/producto/<id>")
+def detailProduct(id=None):
+	print id
+	fbase = firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
+
+	products = fbase.get('/producto/categoria', None)
+
+	product = products[id]
+	return render_template("detail.html", producto=product)
+
 
 @app.route("/register", methods=('GET', 'POST'))
 def register():
@@ -49,7 +62,22 @@ def register():
                  params={'print': 'pretty'},
                  headers={'X_FANCY_HEADER': 'very fancy'})
 
-
 	if formulario.validate_on_submit():
 		fbase.post()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 3de51319afee84f8ae7438cfed3666aae8fa7a1b
 
