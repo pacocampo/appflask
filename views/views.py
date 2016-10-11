@@ -8,6 +8,9 @@ from forms.forms import Formulario, ProductoForm
 import json
 from firebase import firebase
 
+
+
+
 @app.route("/")
 def index():
 	contexto = ["Xime", "Elena", "Mariana"]
@@ -31,9 +34,22 @@ def api():
 def producto():
 	formulario = ProductoForm()
 	fbase = firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
+	auth = fbase.auth()
 	if formulario.validate_on_submit():
 		fbase.post('/producto/categoria', {"categoria":formulario.nombre.data, "tag":formulario.precio.data})
-	result = fbase.get('/producto/categoria', None)
-	print(result)
+	#esto hace un get a nuestra base de datos
+	result = fbase.get('/producto/categoria/', None)
 	return render_template("producto.html", data = result, form=formulario)
+
+@app.route("/register", methods=('GET', 'POST'))
+def register():
+	formulario = RegistroForm()
+	fbase =  firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
+	firebase.get('/users', None,
+                 params={'print': 'pretty'},
+                 headers={'X_FANCY_HEADER': 'very fancy'})
+
+
+	if formulario.validate_on_submit():
+		fbase.post()
 
