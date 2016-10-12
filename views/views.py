@@ -6,10 +6,22 @@ from flask import render_template
 from miApi.api import Direccion
 from forms.forms import Formulario, ProductoForm
 import json
-from firebase import firebase
+#importamos la libreria de firebase
+import pyrebase
 
+#Creamos una funcion que regrese un objeto firebase ya con las credenciales
+def firebaseObject():
+	# Llena con los datos de tu app de firebase
+	config = {
+	"apiKey": "",
+	"authDomain": "",
+	"databaseURL": "",
+	"storageBucket": ""
+	}
+	# Inicializa un objeto firebase
+	firebase = pyrebase.initialize_app(config)
 
-
+	return firebase
 
 @app.route("/")
 def index():
@@ -32,52 +44,34 @@ def api():
 
 @app.route("/producto", methods=('GET', 'POST'))
 def producto():
-	formulario = ProductoForm()
-	fbase = firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
+	# Creamos un objeto firebase (funcion de arriba)
+	fbase = firebaseObject()
+	# Creamos un objeto Firebase Authentication para validar al usuario registrado
 	auth = fbase.auth()
+	# Obtenemos los datos del usuario (no necesario para futuras transacciones)
+	user = auth.sign_in_with_email_and_password('paco.ocampor@gmail.com', '41000705')
+	# Creamos un objeto Firebase database
+	db = fbase.database()
+	# Obtenemos los registro de producto ("/producto")
+	result = db.child("producto").get()
+	# Formularios
+	formulario = ProductoForm()
 	if formulario.validate_on_submit():
-		fbase.post('/producto/categoria', {"categoria":formulario.nombre.data, "tag":formulario.precio.data})
-	#esto hace un get a nuestra base de datos
-	result = fbase.get('/producto/categoria', None)
-	print(result)
-
-	return render_template("producto.html", data = result, form=formulario)
+		# Creamos un diccionario con los datos que vamos a guardar dentro de firebase
+		data = {"nombre":formulario.nombre.data, "precio" : formulario.precio.data, "categoria" :{"categoria": 3}}
+		# Hacemos el registro dentro de producto con la funcion "push" que recibe nuestro diccionario
+		db.child("producto").push(data)
+	return render_template("producto.html", data=result.val(), form=formulario)
 
 @app.route("/producto/<id>")
 def detailProduct(id=None):
-	print id
-	fbase = firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
-
-	products = fbase.get('/producto/categoria', None)
-
-	product = products[id]
-	return render_template("detail.html", producto=product)
-
-
-@app.route("/register", methods=('GET', 'POST'))
-def register():
-	formulario = RegistroForm()
-	fbase =  firebase.FirebaseApplication('https://demoflask-99c26.firebaseio.com/', None)
-	firebase.get('/users', None,
-                 params={'print': 'pretty'},
-                 headers={'X_FANCY_HEADER': 'very fancy'})
-
-	if formulario.validate_on_submit():
-		fbase.post()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 3de51319afee84f8ae7438cfed3666aae8fa7a1b
-
+	# Creamos un objeto firebase (funcion de arriba)
+	fbase = firebaseObject()
+	# Creamos un objeto Firebase database
+	db = fbase.database()
+	# Obtenemos el detalle del producto, en el primer child establecemos
+	# el parent de la informacion que queremos detallar en este caso "producto"
+	# en el segundo child pasamos el id del producto
+	products = db.child("producto").child(id).get()
+	#regresamos el resultado del products con la funcion each que lo convierte en un objeto iterable
+	return render_template("detail.html", producto=products.each())

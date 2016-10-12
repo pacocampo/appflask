@@ -1,5 +1,8 @@
 {% extends "main.html" %}
 {% block info %}
-	<h3>{{producto['categoria']}}</h3>
-	<h2>{{producto['tag']}}</h2>
+{% for prod in producto  %}
+	<h3>{{prod.key()}}</h3>
+	<h2>{{prod.val()}}</h2>
+{% endfor %}
+	
 {% endblock info %}
